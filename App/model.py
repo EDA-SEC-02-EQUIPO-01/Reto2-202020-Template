@@ -19,17 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  """
-import config
+import config as cf
+import sys
+import csv
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
-assert config
+from DISClib.DataStructures import listiterator as it
+from DISClib.DataStructures import liststructure as lt
 
 """
 En este archivo definimos los TADs que vamos a usar,
 es decir contiene los modelos con los datos en memoria
 
 """
+    
+def compareRecordIds (recordA, recordB):
+    if int(recordA['id']) == int(recordB['id']):
+        return 0
+    elif int(recordA['id']) > int(recordB['id']):
+        return 1
+    return -1
+    
+def loadCSVFile (file, cmpfunction):
+    lst=lt.newList("ARRAY_LIST", cmpfunction)
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    try:
+        with open(cf.data_dir + file, encoding="utf-8") as csvfile:
+            row = csv.DictReader(csvfile, dialect=dialect)
+            for elemento in row: 
+                lt.addLast(lst,elemento)
+    except:
+        print("Hubo un error con la carga del archivo")
+    return lst
 
 # -----------------------------------------------------
 # API del TAD Catalogo de Libros

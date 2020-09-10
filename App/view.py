@@ -24,7 +24,7 @@ import sys
 import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
-from App import controller
+from App import controller as c
 assert config
 
 """
@@ -33,6 +33,28 @@ Presenta el menu de opciones y por cada seleccion
 hace la solicitud al controlador para ejecutar la
 operación seleccionada.
 """
+def printMenu():
+    """
+    Imprime el menu de opciones
+    """
+    print("\nBienvenido")
+    print("1- Cargar Datos")
+    print("0- Salir")
+
+
+def main():
+    while True:
+        printMenu() #imprimir el menu de opciones en consola
+        inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
+        if len(inputs)>0:
+
+            if int(inputs[0])==1: #opcion 1
+                lstmovies = c.loadlst("themoviesdb\SmallMoviesDetailsCleaned.csv")
+            elif int(inputs[0])==0: #opcion 0, salir
+                sys.exit(0)
+                
+if __name__ == "__main__":
+    main()
 
 # ___________________________________________________
 #  Ruta a los archivos
