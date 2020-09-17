@@ -26,6 +26,20 @@ from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller as c
 assert config
+from time import process_time
+
+def imprimir_productoras(productora):
+    if productora:
+        print('Productora encontrada: ' + productora["nombre"])
+        print('Promedio: ' + str(c.promediar(productora)))
+        print('Total de peliculas: ' + str(lt.size(productora["peliculas"])))
+        
+        iterator = it.newIterator(productora["peliculas"])
+        while it.hasNext(iterator):
+            book = it.next(iterator)
+            print('Titulo: ' + book['title'] + '  votacion promedio: ' + book['vote_average'])
+    else:
+        print('No se encontro la productora')
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -39,6 +53,8 @@ def printMenu():
     """
     print("\nBienvenido")
     print("1- Cargar Datos")
+    print("2- Cargar Catalogo de peliculas")
+    print("3- Buscar productoras")
     print("0- Salir")
 
 
@@ -50,6 +66,20 @@ def main():
 
             if int(inputs[0])==1: #opcion 1
                 lstmovies = c.loadlst("themoviesdb\SmallMoviesDetailsCleaned.csv")
+                lstcast= c.loadCast("themoviesdb\MoviesCastingRaw-small.csv")
+                cont=c.crear_catalogo()
+            if int(inputs[0])==2: #opcion 2
+                print("Crendo catalogo de peliculas")
+                t1_start=process_time()
+                c.cargar_productoras(cont)
+                print("completado")
+                t1_stop=process_time()
+                print(f"{t1_stop-t1_start} segundos")
+            if int(inputs[0])==3: #opcion 3
+                nombre_productora=input("Ingrese la productora que desea investigar\n")
+                producer=c.obtener_productoras(cont,nombre_productora)
+                imprimir_productoras(producer)
+
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
                 
@@ -69,7 +99,6 @@ if __name__ == "__main__":
 #  respuesta.  La vista solo interactua con
 #  el controlador.
 # ___________________________________________________
-
 
 
 # ___________________________________________________
