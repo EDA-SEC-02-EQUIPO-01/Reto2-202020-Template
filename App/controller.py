@@ -24,7 +24,8 @@ import config as cf
 from App import model as m
 import csv
 from DISClib.ADT import list as lt
-from DISClib.DataStructures import liststructure as lt
+from DISClib.DataStructures import liststructure as lt 
+from DISClib.DataStructures import listiterator as it
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -46,10 +47,16 @@ def loadlst (file):
     "\n"+ " "*18 + "Número de votos: " + last["vote_count"]+"\n"+ " "*18 + "Idioma: "+ last["original_language"])
     return lst
 
+def loadCast (file):
+    lst = m.loadCSVFile("themoviesdb\SmallMoviesDetailsCleaned.csv") 
+    return lst
+
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
-
+def crear_catalogo():
+    catalogo=m.catalogo_de_peliculas()
+    return catalogo
 
 
 
@@ -57,3 +64,31 @@ def loadlst (file):
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+def cargar_productoras(catalogo):
+    archivo_prod = cf.data_dir + "themoviesdb\SmallMoviesDetailsCleaned.csv"
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    input_file = csv.DictReader(open(archivo_prod,encoding="utf-8"),dialect=dialect)
+    for prod in input_file:
+        m.agregar_pelicula(catalogo,prod)
+        productoras = prod['production_companies'].split(",")  
+        for productora in productoras:
+            m.agregar_pelicula_productora(catalogo,productora.strip(),prod)
+def promediar(productora):
+    total=0
+    iterator = it.newIterator(productora["peliculas"])
+    while it.hasNext(iterator):
+        movie = it.next(iterator)
+        total+= float(movie['vote_average'])
+    total=round((total/lt.size(productora["peliculas"])),1)
+    return total
+
+def obtener_productoras(catalogo, productora):
+    """ 
+        Permite obtener una productora y sus datos respectivos en un catalogo de 
+        productoras
+        catalogo: El catalogo de productoras donde se buscara la productora elegida
+        productora: La productora (str) que se desea buscar en el catalogo
+                                                                            """
+    la_productora=m.buscar_productora(catalogo,productora)
+    return la_productora    
