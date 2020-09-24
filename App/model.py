@@ -61,6 +61,7 @@ def loadCSVFile (file, cmpfunction=None):
 def catalogo_de_peliculas():
     catalog = {'peliculas': None,
                'director': None,
+               'actores':None,
                'productoras': None,
                'genero': None,
                'pais': None,
@@ -70,6 +71,10 @@ def catalogo_de_peliculas():
     catalog['director'] = mp.newMap(200,
                                    maptype='PROBING',
                                    loadfactor=0.4)
+    catalog['actores'] = mp.newMap(1000,
+                                   maptype='CHAINING',
+                                   loadfactor=0.7,
+                                   comparefunction=compareActorsByName)
     catalog['productoras'] = mp.newMap(200,
                                    maptype='PROBING',
                                    loadfactor=0.5,
@@ -91,7 +96,16 @@ def catalogo_de_peliculas():
 
 # Funciones para agregar informacion al catalogo
  
-
+def newActor(name):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    actor = {"nombre": None,
+            "peliculas":None,
+            "cantidad de peliculas":None,
+            "votacion_promedio":None}
+    actor['nombre'] = name
+    actor["peliculas"] = lt.newList()
+    return actor
+   
 def nueva_productora(productora):
     productora_llena={"nombre":None,
                 "peliculas":None,
@@ -141,8 +155,41 @@ def agregar_pelicula_productora(catalogo,productora,pelicula):
         mp.put(productora_completa,productora,valor)
     lt.addLast(valor["peliculas"],pelicula)
 
+def addmovie(catalog, movie):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    lt.addLast(catalog['peliculas'], movie)
 
+def addmovieactor(catalog, actorname, movie):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    actors = catalog['actores']
+    existactor = mp.contains(actors, actorname)
+    if existactor:
+        entry = mp.get(actors, actorname)
+        actor = me.getValue(entry)
+    else:
+        actor = newActor(actorname)
+        mp.put(actors, actorname, actor)
+    lt.addLast(actor['peliculas'], movie)
 
+def addmovieactor(catalog, actorname, movie):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    actors = catalog['actores']
+    existactor = mp.contains(actors, actorname)
+    if existactor:
+        entry = mp.get(actors, actorname)
+        actor = me.getValue(entry)
+    else:
+        actor = newActor(actorname)
+        mp.put(actors, actorname, actor)
+    lt.addLast(actor['peliculas'], movie)
+
+def conversor_entre_cvs_Juli(id_movie,iterador):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    while it.hasNext(iterador):
+        counter=it.next(iterador)
+        if counter['id']==id_movie:
+            return counter
+       
 # ==============================
 # Funciones de consulta
 # ==============================
@@ -157,6 +204,13 @@ def buscar_genero(catalogo,genero):
     el_genero=mp.get(catalogo['genero'],genero)
     if el_genero:
         return me.getValue(el_genero)
+    return None
+   
+def getMoviesByActor(catalog, actorname):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    actor = mp.get(catalog['actores'], actorname)
+    if actor:
+        return me.getValue(actor)
     return None
 # ==============================
 # Funciones de Comparacion
@@ -196,6 +250,16 @@ def comparar_generos(keyname,genero):
     if (keyname == genre):
         return 0
     elif (keyname > genre):
+        return 1
+    else:
+        return -1
+     
+def compareActorsByName(keyname, actor):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    authentry = me.getKey(actor)
+    if (keyname == authentry):
+        return 0
+    elif (keyname > authentry):
         return 1
     else:
         return -1
