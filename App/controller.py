@@ -75,6 +75,32 @@ def cargar_productoras(catalogo):
         for productora in productoras:
             m.agregar_pelicula_productora(catalogo,productora.strip(),prod)
 
+          
+def cargar_pais(catalogo):
+    archivo_prod = cf.data_dir + "themoviesdb\SmallMoviesDetailsCleaned.csv"
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    input_file = csv.DictReader(open(archivo_prod,encoding="utf-8"),dialect=dialect)
+    for prod in input_file:
+        paises = prod['production_countries'].split(",")  
+        for pais in paises:
+            m.agregar_pelicula_pais(catalogo,pais.strip(),prod)
+
+def cargar_directores(catalogo,lts_previa):
+    "Designed by: Nicolas Godoy"
+    archivo_prod = cf.data_dir + "themoviesdb\MoviesCastingRaw-small.csv"
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    input_file = csv.DictReader(open(archivo_prod,encoding="utf-8"),dialect=dialect)
+    for prod in input_file:
+        directores = prod['director_name'].split(",")
+        old_id=prod['id']
+        iterador_pelicula_director=it.newIterator(lts_previa)
+        pelicula_final=conversor_entre_cvs(old_id,iterador_pelicula_director)
+        for director in directores:
+            m.agregar_pelicula_director(catalogo,director,pelicula_final)          
+          
+          
 def cargar_genero(catalogo):
     archivo_prod = cf.data_dir + "themoviesdb\SmallMoviesDetailsCleaned.csv"
     dialect = csv.excel()
@@ -133,6 +159,15 @@ def loadBooks(catalog):
         for actor in actors5:
             m.addmovieactor(catalog, actor.strip(), movie)
 
+def obtener_pais(catalogo, pais):
+    el_pais=m.buscar_pais(catalogo,pais)
+    return el_pais
+
+def obtener_director(catalogo, director):
+    "Designed by: Nicolas Godoy"
+    el_director=m.buscar_director(catalogo,director)
+    return el_director          
+          
 def promediar_Juli(lista):
     """Designed by: Juliana Andrea Galeano Caicedo"""
     total=0
