@@ -41,6 +41,37 @@ def imprimir_productoras(productora):
     else:
         print('No se encontro la productora')
 
+def imprimir_pais(productora,lst_alterna):
+    if productora:
+        print('Pais encontrado: ' + productora["pais"])
+        print('Promedio: ' + str(c.promediar(productora)))
+        print('Total de peliculas: ' + str(lt.size(productora["peliculas"])))
+        
+        iterator = it.newIterator(productora["peliculas"])
+        while it.hasNext(iterator):
+            book = it.next(iterator)
+            old_id=book['id']
+            iterador_director=it.newIterator(lst_alterna)
+            director=c.conversor_entre_cvs(old_id,iterador_director)
+            print('Titulo: ' + book['title'] + '  votacion promedio: ' + book['vote_average'] + '  Dirigido por: '+director['director_name'])
+    else:
+        print('No se encontro la productora')
+
+def imprimir_director(genero):
+    """Designed by: Nicolas Godoy"""
+    if genero:
+        print('Director encontrado: ' + genero["director"])
+        print('Promedio: ' + str(c.promediar(genero,'vote_average')))
+        print('Total de peliculas: ' + str(lt.size(genero["peliculas"])))
+        
+        iterator = it.newIterator(genero["peliculas"])
+        while it.hasNext(iterator):
+            book = it.next(iterator)
+            print('Titulo: ' + book['title'] + '  votacion promedio: ' + book['vote_average'])
+    else:
+        print('No se encontro el director')
+      
+      
 def imprimir_genero(genero):
     """Designed by: Diego Alejandro Camelo Giraldo"""
     if genero:
@@ -95,7 +126,9 @@ def printMenu():
     print("2- Cargar Catalogo de peliculas")
     print("3- Buscar productoras")
     print("4- Conocer a un actor")
+    print("5- Buscar Director")
     print("6- Entender genero")
+    print("7- Buscar Pais")
     print("0- Salir")
 
 
@@ -126,10 +159,19 @@ def main():
                 actorname=input("Ingrese el actor que desea conocer\n")
                 actor=c.MoviesByActor(cont,actorname)
                 printActorData(actor,lstmovies)
+            elif int(inputs[0])==5: 
+                nombre_director=input("Ingrese el director que desea revisar\n")
+                producer=c.obtener_director(cont,nombre_director)
+                imprimir_director(producer)
             elif int(inputs[0])==6: #opcion 3
                 nombre_genero=input("Ingrese el genero que desea entender\n")
                 genre=c.obtener_genero(cont,nombre_genero)
                 imprimir_genero(genre)
+            elif int(inputs[0])==7:
+                nombre_pais=input("ingrese el pais que desea buscar\n")
+                country=c.obtener_pais(cont,nombre_pais)
+                imprimir_pais(country,lstcast)    
+   
 
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
@@ -151,7 +193,11 @@ if __name__ == "__main__":
 #  el controlador.
 # ___________________________________________________
 
-
+def conversor_entre_cvs(id_movie,iterador):
+    while it.hasNext(iterador):
+        counter=it.next(iterador)
+        if counter['id']==id_movie:
+            return counter
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
