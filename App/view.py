@@ -41,6 +41,20 @@ def imprimir_productoras(productora):
     else:
         print('No se encontro la productora')
 
+def imprimir_genero(genero):
+    """Designed by: Diego Alejandro Camelo Giraldo"""
+    if genero:
+        print('Genero entendido: ' + genero["genero"])
+        print('Promedio: ' + str(c.promediar(genero,'vote_count')))
+        print('Total de peliculas: ' + str(lt.size(genero["peliculas"])))
+        
+        iterator = it.newIterator(genero["peliculas"])
+        while it.hasNext(iterator):
+            book = it.next(iterator)
+            print('Titulo: ' + book['title'] + '  votacion promedio: ' + book['vote_count'])
+    else:
+        print('No se encontro el genero')
+
 """
 La vista se encarga de la interacción con el usuario.
 Presenta el menu de opciones y por cada seleccion
@@ -55,6 +69,7 @@ def printMenu():
     print("1- Cargar Datos")
     print("2- Cargar Catalogo de peliculas")
     print("3- Buscar productoras")
+    print("6- Entender genero")
     print("0- Salir")
 
 
@@ -68,17 +83,22 @@ def main():
                 lstmovies = c.loadlst("themoviesdb\SmallMoviesDetailsCleaned.csv")
                 lstcast= c.loadCast("themoviesdb\MoviesCastingRaw-small.csv")
                 cont=c.crear_catalogo()
-            if int(inputs[0])==2: #opcion 2
+            elif int(inputs[0])==2: #opcion 2
                 print("Crendo catalogo de peliculas")
                 t1_start=process_time()
                 c.cargar_productoras(cont)
+                c.cargar_genero(cont)
                 print("completado")
                 t1_stop=process_time()
                 print(f"{t1_stop-t1_start} segundos")
-            if int(inputs[0])==3: #opcion 3
+            elif int(inputs[0])==3: #opcion 3
                 nombre_productora=input("Ingrese la productora que desea investigar\n")
                 producer=c.obtener_productoras(cont,nombre_productora)
                 imprimir_productoras(producer)
+            elif int(inputs[0])==6: #opcion 3
+                nombre_genero=input("Ingrese el genero que desea entender\n")
+                genre=c.obtener_genero(cont,nombre_genero)
+                imprimir_genero(genre)
 
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
