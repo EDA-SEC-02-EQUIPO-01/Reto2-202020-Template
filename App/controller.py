@@ -109,3 +109,51 @@ def obtener_productoras(catalogo, productora):
 def obtener_genero(catalogo, genero):
     el_genero=m.buscar_genero(catalogo,genero)
     return el_genero  
+def loadBooks(catalog):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    moviefile = cf.data_dir + "themoviesdb\MoviesCastingRaw-small.csv"
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    input_file = csv.DictReader(open(moviefile,encoding="utf-8"),dialect=dialect)
+    for movie in input_file:
+        m.addmovie(catalog, movie)
+        actors1 = movie['actor1_name'].split(",")  
+        for actor in actors1:
+            m.addmovieactor(catalog, actor.strip(), movie)
+        actors2 = movie['actor2_name'].split(",")
+        for actor in actors2:
+            m.addmovieactor(catalog, actor.strip(), movie)
+        actors3 = movie['actor3_name'].split(",")
+        for actor in actors3:
+            m.addmovieactor(catalog, actor.strip(), movie)
+        actors4 = movie['actor4_name'].split(",")
+        for actor in actors4:
+            m.addmovieactor(catalog, actor.strip(), movie)
+        actors5 = movie['actor5_name'].split(",")
+        for actor in actors5:
+            m.addmovieactor(catalog, actor.strip(), movie)
+
+def promediar_Juli(lista):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    total=0
+    iterator = it.newIterator(lista)
+    while it.hasNext(iterator):
+        movie = it.next(iterator)
+        total+= float(movie['vote_average'])
+    total=round((total/lt.size(lista)),1)
+    return total
+
+def Colaboraciones(dicc):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    ordenar=sorted(dicc.items(),key=lambda x:x[1], reverse=True)
+    return ordenar[0][0]
+
+def MoviesByActor(catalog, actorname):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    actorinfo = m.getMoviesByActor(catalog, actorname)
+    return actorinfo
+
+def conversor(id_movie,iterador):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    pelicula=m.conversor_entre_cvs_Juli(id_movie,iterador)
+    return pelicula
