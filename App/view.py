@@ -148,6 +148,7 @@ def main():
                 c.cargar_productoras(cont)
                 c.cargar_genero(cont)
                 c.loadMoviesByActor(cont)
+                c.cargar_directores(cont,lstmovies)
                 print("completado")
                 t1_stop=process_time()
                 print(f"{t1_stop-t1_start} segundos")
