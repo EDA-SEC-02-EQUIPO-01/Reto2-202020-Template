@@ -143,7 +143,7 @@ def main():
                 lstcast= c.loadCast("themoviesdb\MoviesCastingRaw-small.csv")
                 cont=c.crear_catalogo()
             elif int(inputs[0])==2: #opcion 2
-                print("Crendo catalogo de peliculas")
+                print("Creando catalogo de peliculas")
                 t1_start=process_time()
                 c.cargar_productoras(cont)
                 c.cargar_genero(cont)
