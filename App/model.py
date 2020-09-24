@@ -106,6 +106,15 @@ def newActor(name):
     actor["peliculas"] = lt.newList()
     return actor
    
+def nuevo_pais(pais):
+    pais_lleno={"pais":None,
+                "peliculas":None
+                }
+    pais_lleno["pais"]=pais
+    pais_lleno["peliculas"]=lt.newList()
+    
+    return pais_lleno   
+   
 def nueva_productora(productora):
     productora_llena={"nombre":None,
                 "peliculas":None,
@@ -126,7 +135,15 @@ def nuevo_genero(genero):
     genero_lleno["peliculas"]=lt.newList()
 
     return genero_lleno
+def nuevo_director(director):
+    "Designed by: Nicolas Godoy"
+    dic_lleno={"director":None,
+                "peliculas":None
+                }
+    dic_lleno["director"]=director
+    dic_lleno["peliculas"]=lt.newList()
 
+   
 def agregar_genero_pelicula(catalogo,genero,pelicula):
     """Designed by: Diego Alejandro Camelo Giraldo"""
     genero_completo=catalogo["genero"]
@@ -143,7 +160,29 @@ def agregar_pelicula(catalogo, pelicula):
     lt.addLast(catalogo['peliculas'],pelicula)
     mp.put(catalogo['pais'],pelicula['production_countries'],pelicula)
     
+def agregar_pelicula_pais(catalogo,pais,pelicula):
+    productora_completa=catalogo["pais"]
+    comprobante=mp.contains(productora_completa,pais)
+    if comprobante:
+        entry=mp.get(productora_completa,pais)
+        valor=me.getValue(entry)
+    else:
+        valor=nuevo_pais(pais)
+        mp.put(productora_completa,pais,valor)
+    lt.addLast(valor["peliculas"],pelicula)
 
+def agregar_pelicula_director(catalogo,director,pelicula):
+    "Designed by: Nicolas Godoy"
+    productora_completa=catalogo["director"]
+    comprobante=mp.contains(productora_completa,director)
+    if comprobante:
+        entry=mp.get(productora_completa,director)
+        valor=me.getValue(entry)
+    else:
+        valor=nuevo_director(director)
+        mp.put(productora_completa,director,valor)
+    lt.addLast(valor["peliculas"],pelicula)
+    
 def agregar_pelicula_productora(catalogo,productora,pelicula):
     productora_completa=catalogo["productoras"]
     comprobante=mp.contains(productora_completa,productora)
@@ -206,6 +245,19 @@ def buscar_genero(catalogo,genero):
         return me.getValue(el_genero)
     return None
    
+def buscar_pais(catalogo,pais):
+    el_pais=mp.get(catalogo['pais'],pais)
+    if el_pais:
+        return me.getValue(el_pais)
+    return None
+
+def buscar_director(catalogo,director):
+    "Designed by: Nicolas Godoy"
+    el_director=mp.get(catalogo['director'],director)
+    if el_director:
+        return me.getValue(el_director)
+    return None 
+   
 def getMoviesByActor(catalog, actorname):
     """Designed by: Juliana Andrea Galeano Caicedo"""
     actor = mp.get(catalog['actores'], actorname)
@@ -263,3 +315,18 @@ def compareActorsByName(keyname, actor):
         return 1
     else:
         return -1
+def comparar_director(keyname,genero):
+    """
+    Compara dos generos, el primero es una cadena. 
+    El segundo es entry de un map
+    """
+    "Designed by: Nicolas Godoy"
+    genre=me.getKey(genero)
+    if (keyname == genre):
+        return 0
+    elif (keyname > genre):
+        return 1
+    else:
+        return -1
+
+     
