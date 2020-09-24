@@ -159,7 +159,6 @@ def agregar_genero_pelicula(catalogo,genero,pelicula):
 
 def agregar_pelicula(catalogo, pelicula):
     lt.addLast(catalogo['peliculas'],pelicula)
-    mp.put(catalogo['pais'],pelicula['production_countries'],pelicula)
     
 def agregar_pelicula_pais(catalogo,pais,pelicula):
     productora_completa=catalogo["pais"]
