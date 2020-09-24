@@ -58,7 +58,11 @@ def crear_catalogo():
     catalogo=m.catalogo_de_peliculas()
     return catalogo
 
-
+def conversor_entre_cvs(id_movie,iterador):
+    while it.hasNext(iterador):
+        counter=it.next(iterador)
+        if counter['id']==id_movie:
+            return counter
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
