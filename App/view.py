@@ -54,6 +54,31 @@ def imprimir_genero(genero):
             print('Titulo: ' + book['title'] + '  votacion promedio: ' + book['vote_count'])
     else:
         print('No se encontro el genero')
+      
+def printActorData(actor,lista):
+    """Designed by: Juliana Andrea Galeano Caicedo"""
+    if actor:
+        directores={}
+        votacion= lt.newList()
+        print('Actor encontrado: ' + actor['nombre'])
+        print('Total de peliculas: ' + str(lt.size(actor['peliculas'])))
+        iterator = it.newIterator(actor['peliculas'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            if movie["director_name"] in directores:
+                directores[movie["director_name"]]+=1
+            else:
+                directores[movie["director_name"]]=1
+            iterador_pelicula=it.newIterator(lista)
+            peli=c.conversor(movie['id'],iterador_pelicula)
+            lt.addLast(votacion,peli)
+            print('Titulo: ' + peli['original_title'])
+        promedio=c.promediar_Juli(votacion)
+        mascolab=c.Colaboraciones(directores)
+        print("Votación promedio: ",promedio)
+        print("Director con más colaboraciones: ",mascolab)
+    else:
+        print('No se encontro el actor')
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -69,6 +94,7 @@ def printMenu():
     print("1- Cargar Datos")
     print("2- Cargar Catalogo de peliculas")
     print("3- Buscar productoras")
+    print("4- Conocer a un actor")
     print("6- Entender genero")
     print("0- Salir")
 
@@ -95,6 +121,10 @@ def main():
                 nombre_productora=input("Ingrese la productora que desea investigar\n")
                 producer=c.obtener_productoras(cont,nombre_productora)
                 imprimir_productoras(producer)
+            elif int(inputs[0])==4: #opcion 3
+                actorname=input("Ingrese el actor que desea conocer\n")
+                actor=c.MoviesByActor(cont,actorname)
+                printActorData(actor,lstmovies)
             elif int(inputs[0])==6: #opcion 3
                 nombre_genero=input("Ingrese el genero que desea entender\n")
                 genre=c.obtener_genero(cont,nombre_genero)
