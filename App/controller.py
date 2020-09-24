@@ -135,7 +135,7 @@ def obtener_productoras(catalogo, productora):
 def obtener_genero(catalogo, genero):
     el_genero=m.buscar_genero(catalogo,genero)
     return el_genero  
-def loadBooks(catalog):
+def loadMoviesByActor(catalog):
     """Designed by: Juliana Andrea Galeano Caicedo"""
     moviefile = cf.data_dir + "themoviesdb\MoviesCastingRaw-small.csv"
     dialect = csv.excel()
