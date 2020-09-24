@@ -74,12 +74,25 @@ def cargar_productoras(catalogo):
         productoras = prod['production_companies'].split(",")  
         for productora in productoras:
             m.agregar_pelicula_productora(catalogo,productora.strip(),prod)
-def promediar(productora):
+
+def cargar_genero(catalogo):
+    archivo_prod = cf.data_dir + "themoviesdb\SmallMoviesDetailsCleaned.csv"
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    input_file = csv.DictReader(open(archivo_prod,encoding="utf-8"),dialect=dialect)
+    for prod in input_file:
+        generos = prod['genres'].split(",")  
+        for genero in generos:
+            lst_genero=genero.split("|")
+            for un_genero in lst_genero:
+                m.agregar_genero_pelicula(catalogo,un_genero.strip(),prod)
+
+def promediar(productora,caracteristica='vote_average'):
     total=0
     iterator = it.newIterator(productora["peliculas"])
     while it.hasNext(iterator):
         movie = it.next(iterator)
-        total+= float(movie['vote_average'])
+        total+= float(movie[caracteristica])
     total=round((total/lt.size(productora["peliculas"])),1)
     return total
 
@@ -92,3 +105,7 @@ def obtener_productoras(catalogo, productora):
                                                                             """
     la_productora=m.buscar_productora(catalogo,productora)
     return la_productora    
+
+def obtener_genero(catalogo, genero):
+    el_genero=m.buscar_genero(catalogo,genero)
+    return el_genero  
