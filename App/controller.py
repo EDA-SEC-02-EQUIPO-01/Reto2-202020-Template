@@ -48,7 +48,7 @@ def loadlst (file):
     return lst
 
 def loadCast (file):
-    lst = m.loadCSVFile("themoviesdb\SmallMoviesDetailsCleaned.csv") 
+    lst = m.loadCSVFile("themoviesdb\MoviesCastingRaw-small.csv") 
     return lst
 
 # ___________________________________________________
