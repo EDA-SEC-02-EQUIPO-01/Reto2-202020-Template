@@ -70,7 +70,8 @@ def catalogo_de_peliculas():
     catalog['peliculas'] = lt.newList('ARRAY_LIST')
     catalog['director'] = mp.newMap(200,
                                    maptype='PROBING',
-                                   loadfactor=0.4)
+                                   loadfactor=0.4,
+                                   comparefunction=comparar_director)
     catalog['actores'] = mp.newMap(1000,
                                    maptype='CHAINING',
                                    loadfactor=0.7,
@@ -142,7 +143,7 @@ def nuevo_director(director):
                 }
     dic_lleno["director"]=director
     dic_lleno["peliculas"]=lt.newList()
-
+    return dic_lleno
    
 def agregar_genero_pelicula(catalogo,genero,pelicula):
     """Designed by: Diego Alejandro Camelo Giraldo"""
