@@ -76,7 +76,8 @@ def catalogo_de_peliculas():
                                    comparefunction=comparar_productoras_por_nombre)
     catalog['genero'] = mp.newMap(1000,
                                 maptype='CHAINING',
-                                loadfactor=0.7
+                                loadfactor=0.7,
+                                comparefunction=comparar_generos
                                 )
     catalog['pais'] = mp.newMap(1000,
                                   maptype='CHAINING',
@@ -101,6 +102,28 @@ def nueva_productora(productora):
     productora_llena["peliculas"]=lt.newList()
 
     return productora_llena
+
+def nuevo_genero(genero):
+    """Designed by: Diego Alejandro Camelo Giraldo"""
+    genero_lleno={"genero":None,
+                "peliculas":None
+                }
+    genero_lleno["genero"]=genero
+    genero_lleno["peliculas"]=lt.newList()
+
+    return genero_lleno
+
+def agregar_genero_pelicula(catalogo,genero,pelicula):
+    """Designed by: Diego Alejandro Camelo Giraldo"""
+    genero_completo=catalogo["genero"]
+    comprobante=mp.contains(genero_completo,genero)
+    if comprobante:
+        entry=mp.get(genero_completo,genero)
+        valor=me.getValue(entry)
+    else:
+        valor=nuevo_genero(genero)
+        mp.put(genero_completo,genero,valor)
+    lt.addLast(valor["peliculas"],pelicula)
 
 def agregar_pelicula(catalogo, pelicula):
     lt.addLast(catalogo['peliculas'],pelicula)
@@ -129,7 +152,12 @@ def buscar_productora(catalogo,productora):
         return me.getValue(la_productora)
     return None
 
-
+def buscar_genero(catalogo,genero):
+    """Designed by: Diego Alejandro Camelo Giraldo"""
+    el_genero=mp.get(catalogo['genero'],genero)
+    if el_genero:
+        return me.getValue(el_genero)
+    return None
 # ==============================
 # Funciones de Comparacion
 # ==============================
@@ -155,6 +183,19 @@ def comparar_paises(keyname, pais):
     if (keyname == authentry):
         return 0
     elif (keyname > authentry):
+        return 1
+    else:
+        return -1
+
+def comparar_generos(keyname,genero):
+    """
+    Compara dos generos, el primero es una cadena. 
+    El segundo es entry de un map
+    """
+    genre=me.getKey(genero)
+    if (keyname == genre):
+        return 0
+    elif (keyname > genre):
         return 1
     else:
         return -1
